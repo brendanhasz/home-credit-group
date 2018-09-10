@@ -2,8 +2,10 @@
 import numpy as np
 import pandas as pd
 import featuretools as ft
+import time
 from featuretools import selection 
 
+"""
 # Load applications data
 train = pd.read_csv('../application_train.csv')
 test = pd.read_csv('../application_test.csv')
@@ -13,16 +15,23 @@ cash_balance = pd.read_csv('../POS_CASH_balance.csv')
 card_balance = pd.read_csv('../credit_card_balance.csv')
 prev_app = pd.read_csv('../previous_application.csv')
 payments = pd.read_csv('../installments_payments.csv')
+"""
 
-# JUST FOR TESTING
-train = train.loc[:10000,:]
-test = test.loc[:10000,:]
-bureau = bureau.loc[:10000,:]
-bureau_balance = bureau_balance.loc[:10000,:]
-cash_balance = cash_balance.loc[:10000,:]
-card_balance = card_balance.loc[:10000,:]
-prev_app = prev_app.loc[:10000,:]
-payments = payments.loc[:10000,:]
+# Load applications data for testing
+train = pd.read_csv('application_train.csv', nrows=1000)
+test = pd.read_csv('application_test.csv', nrows=1000)
+bureau = pd.read_csv('bureau.csv', nrows=1000)
+bureau_balance = pd.read_csv('bureau_balance.csv', nrows=1000)
+cash_balance = pd.read_csv('POS_CASH_balance.csv', nrows=1000)
+card_balance = pd.read_csv('credit_card_balance.csv', nrows=1000)
+prev_app = pd.read_csv('previous_application.csv', nrows=1000)
+payments = pd.read_csv('installments_payments.csv', nrows=1000)
+
+# Merge test and train into all application data
+train['Test'] = False
+test['Test'] = True
+test['TARGET'] = np.nan
+app = train.append(test, ignore_index=True)
 
 # Define entities
 # Each entry is "Name", (df, "id_col_name")
